@@ -1,10 +1,9 @@
-import ast
 
 import pyseto
 from pyseto import Key, Token
 
 from app.core.config import settings
-
+from .logger import _logger
 
 
 def create_access_token(data: dict):
@@ -13,6 +12,8 @@ def create_access_token(data: dict):
         token = pyseto.encode(paseto, data)
         return token
     except pyseto.EncryptError as e:
+        _logger.error(f"Error decoding token: {e}")
+
         return e
 
 def claim_access_token(access_token: str)->Token:
@@ -23,6 +24,6 @@ def claim_access_token(access_token: str)->Token:
 
         return data
     except pyseto.DecryptError as e:
-        _logger.error
+        _logger.error(f"Error decoding token: {e}")
         return e
 
