@@ -1,0 +1,10 @@
+.env*
+.idea/
+__pycache__/
+**/*.pyc
+**/__pycache__/
+**/*.pyo
+.db*
+*.sqlite3
+alembic.ini
+
