@@ -1,6 +1,6 @@
 import pytest
 
-from app.security import PasswordHandler
+from app.security.password import PasswordHandler
 
 
 @pytest.mark.parametrize("password, expected", [

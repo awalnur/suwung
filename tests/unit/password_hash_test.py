@@ -1,4 +1,4 @@
-from app.security import generate_password_hash, verify_password
+from app.security.password import generate_password_hash, verify_password
 
 
 def test_generate_password_hash():
