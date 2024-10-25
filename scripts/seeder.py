@@ -5,10 +5,8 @@ from datetime import datetime
 from fastapi.params import Depends
 from sqlalchemy.orm import Session
 
-from app.core import password
-from app.db.base import Base
 from app.db.session import get_db
-from app.models.users import User, Password
+from app.db.models import User, Password
 
 def seed_data(db: Session = Depends(get_db)):
     # Create a new session

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, FastAPI
 
-from .v1 import check, autentication
+from .v1.controllers import autentication, check
 
 v1 = APIRouter(prefix='/v1')
 v1.include_router(autentication.router, tags=["Authentication"])

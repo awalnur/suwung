@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import Column, UUID, DateTime
-from sqlalchemy.ext.declarative import declarative_base, declared_attr, DeclarativeMeta
+from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 
 class AutoNameMeta(DeclarativeMeta):
     def __init__(cls, name, bases, d):

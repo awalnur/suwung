@@ -1,9 +1,8 @@
 import ast
 
-import pytest
 from pyseto import Token
 
-from app.core.security import create_access_token, claim_access_token
+from app.security.security import create_access_token, claim_access_token
 test_env = {
     "SECRET_KEY": "test_secret"
 }

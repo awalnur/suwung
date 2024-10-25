@@ -1,12 +1,20 @@
 
 import pyseto
+from fastapi.security import APIKeyHeader
 from pyseto import Key, Token
 
 from app.core.config import settings
-from .logger import _logger
+from app.core.logger import _logger
 
+oauth = APIKeyHeader(name='Authorization', scheme_name='authorization')
 
 def create_access_token(data: dict):
+    """
+    Create an access token using PASETO (Platform-Agnostic Security Tokens).
+
+    :param data: A dictionary containing the data to be encoded in the token.
+    :return: The encoded access token as a string.
+    """
     paseto=Key.new(version=4, purpose='local', key=settings.SECRET_KEY)
     try:
         token = pyseto.encode(paseto, data)

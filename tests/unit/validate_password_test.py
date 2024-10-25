@@ -1,7 +1,6 @@
 import pytest
-from setuptools.config.pyprojecttoml import validate
 
-from app.core.password import PasswordHandler
+from app.security import PasswordHandler
 
 
 @pytest.mark.parametrize("password, expected", [

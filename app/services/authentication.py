@@ -1,9 +1,6 @@
-from fastapi.params import Depends
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.annotation import Annotated
 
-from app.db.session import get_db
-from app.models.users import User
+from app.db.models.users import User
 
 
 class Authentication:
