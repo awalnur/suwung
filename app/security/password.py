@@ -45,36 +45,35 @@ class PasswordHandler:
         return f"PasswordHandler(valid={self.valid})"
 
 
+    @staticmethod
+    def generate_password_hash(password: str) -> str:
+        """
+
+        Hash a password using Argon2.
+
+        Args:
+            password (str): The plain text password to hash.
+
+        Returns:
+            str: The Argon2 hash of the password.
+        """
+        return argon2.PasswordHasher(salt_len=16).hash(password)
 
 
+    @staticmethod
+    def verify_password(password: str, hashed_password: str) -> bool:
+        """
+        Verify a password against a hashed password.
 
-
-def generate_password_hash(password: str) -> str:
-    """
-
-    Hash a password using Argon2.
-
-    Args:
-        password (str): The plain text password to hash.
-
-    Returns:
-        str: The Argon2 hash of the password.
-    """
-    return argon2.PasswordHasher(salt_len=16).hash(password)
-
-def verify_password(password: str, hashed_password: str) -> bool:
-    """
-    Verify a password against a hashed password.
-
-    :arg
-        password: The plain text password to verify.
-        hashed_password: The hashed password to verify against.
-    :returns:
-        True if the password matches the hashed password, False otherwise.
-    """
-    try:
-        argon2.PasswordHasher(salt_len=16).verify(password=password, hash=hashed_password)
-        return True
-    except argon2.exceptions.VerifyMismatchError:
-        return False
+        :arg
+            password: The plain text password to verify.
+            hashed_password: The hashed password to verify against.
+        :returns:
+            True if the password matches the hashed password, False otherwise.
+        """
+        try:
+            argon2.PasswordHasher(salt_len=16).verify(password=password, hash=hashed_password)
+            return True
+        except argon2.exceptions.VerifyMismatchError:
+            return False
 

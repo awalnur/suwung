@@ -27,7 +27,7 @@ def seed_data(db: Session = Depends(get_db)):
 
     password1 = Password(
         user_id=user1.id,
-        password_hash='hashed_password_1',
+        password_hash=,
         salt='salt_1'
     )
 
