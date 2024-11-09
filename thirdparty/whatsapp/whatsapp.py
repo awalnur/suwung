@@ -8,7 +8,7 @@ class WhatsappClient:
         self.access_token = access_token
         self.phone_number_id = phone_number_id
 
-        self.base_url = f"https://graph.facebook.com/v20.0/450374314817408/messages"
+        self.base_url = f"https://graph.facebook.com/v20.0/{self.phone_number_id}/messages"
         self.headers = {
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json"
