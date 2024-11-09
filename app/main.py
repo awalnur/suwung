@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
+from memory_profiler import profile
 
 from app.api import init_routers
+from app.core.exceptions.handlers import init_exception_handler
 from app.core.logger import hijack_uvicorn_logger
 from app.core.telemetry import init_telemetry
 from app.middlewares import setup_middlewares
@@ -37,7 +39,7 @@ def custom_openapi():
 
 
 
-
+@profile
 def create_app()->FastAPI:
     """
     Create and configure an instance of the FastAPI application.
@@ -51,7 +53,7 @@ def create_app()->FastAPI:
 
     # set custom openapi schema
     init_telemetry(_app)
-
+    init_exception_handler(_app)
     # use custom logger
     hijack_uvicorn_logger()
 
