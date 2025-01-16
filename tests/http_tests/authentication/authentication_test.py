@@ -16,6 +16,6 @@ init_routers(app)
 #     """
 #     transport = ASGITransport(app=app)
 #     async with AsyncClient(transport=transport, base_url="http://test") as ac:
-#         response = await ac.get("/v1/auth/authentication")
+#         response = await ac.post("/v1/auth/token")
 #     assert response.status_code == 200
 #     assert response.json() == {"status": "ok"}

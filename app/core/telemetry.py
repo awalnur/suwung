@@ -2,6 +2,7 @@ import psutil
 from opentelemetry import trace, metrics
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.metrics import Observation
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.sdk.metrics import MeterProvider
@@ -41,37 +42,38 @@ def init_telemetry(app: FastAPI, service_name: str = "suwung-service"):
     metric_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
     metrics.set_meter_provider(metric_provider)
 
+    meter = metrics.get_meter(service_name)
 
-    # Create Meter
-    # meter = metrics.get_meter(__name__)
-    #
-    # # Function to collect memory metrics
-    # def get_memory_metrics(observer):
-    #     memory = psutil.virtual_memory()
-    #     observer.observe(memory.total, {"type": "total"})
-    #     observer.observe(memory.available, {"type": "available"})
-    #     observer.observe(memory.used, {"type": "used"})
-    #     observer.observe(memory.free, {"type": "free"})
-    #     observer.observe(memory.percent, {"type": "percent"})
-    #
-    # def get_cpu_metrics(observer):
-    #     cpu_percent = psutil.cpu_percent(interval=1)
-    #     observer.observe(cpu_percent, {"type": "usage"})
-    #
-    # # Create observable gauges
-    # memory_gauge = meter.create_observable_gauge(
-    #     name="system_memory",
-    #     description="System memory usage metrics",
-    #     unit="bytes",
-    #     callbacks=[get_memory_metrics]
-    # )
-    #
-    # cpu_gauge = meter.create_observable_gauge(
-    #     name="system_cpu",
-    #     description="System CPU usage metrics",
-    #     unit="percent",
-    #     callbacks=[get_cpu_metrics]
-    # )
+    # Fungsi untuk mengumpulkan metrik memori
+    def get_memory_metrics(options):  # Terima satu argumen (tidak digunakan)
+        memory = psutil.virtual_memory()
+        return [
+            Observation(memory.total, {"type": "total"}),
+            Observation(memory.available, {"type": "available"}),
+            Observation(memory.used, {"type": "used"}),
+            Observation(memory.free, {"type": "free"}),
+            Observation(memory.percent, {"type": "percent"}),
+        ]
+
+    # Fungsi untuk mengumpulkan metrik CPU
+    def get_cpu_metrics(options):  # Terima satu argumen (tidak digunakan)
+        cpu_usage = psutil.cpu_percent(interval=1)
+        return [Observation(cpu_usage, {"type": "usage"})]
+
+    # Register observable gauges
+    meter.create_observable_gauge(
+        name="system_memory",
+        description="Metrics untuk penggunaan memori sistem",
+        unit="bytes",
+        callbacks=[get_memory_metrics]
+    )
+
+    meter.create_observable_gauge(
+        name="system_cpu",
+        description="Metrics untuk penggunaan CPU sistem",
+        unit="percent",
+        callbacks=[get_cpu_metrics]
+    )
 
     # Instrument FastAPI
     FastAPIInstrumentor.instrument_app(app)

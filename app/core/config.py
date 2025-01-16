@@ -12,6 +12,10 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str = "INFO"
 
+    ACCESS_TOKEN_EXPIRATION: int = 3600
+    REFRESH_TOKEN_EXPIRATION: int = 86400
+    WHATSAPP_ACCESS_TOKEN: str = ""
+    WHATSAPP_PHONE_NUMBER_ID: str = ""
 
     model_config = SettingsConfigDict(env_file='.env')
 

@@ -1,12 +1,47 @@
-# /config/prometheus.yml
 global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
+  scrape_interval: 15s  # Default scrape interval for all jobs
+  evaluation_interval: 15s  # Default evaluation interval for rules
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'  # Replace with your Alertmanager address
+
+rule_files:
+  - "alert_rules.yml"  # Path to alerting rules file
 
 scrape_configs:
+  # Scrape the OpenTelemetry Collector
   - job_name: 'otel-collector'
     static_configs:
-      - targets: ['otel-collector:8889']
+      - targets: ['otel-collector:8889']  # Adjust the target address as needed
     metric_relabel_configs:
       - action: labeldrop
-        regex: ^target_info.*
+        regex: ^target_info.*  # Drop unnecessary labels
+
+  # Scrape your FastAPI application
+  - job_name: 'fastapi-app'
+    static_configs:
+      - targets: ['fastapi-app:8000']  # Adjust the target address and port
+    metrics_path: '/metrics'  # Path to the metrics endpoint
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: namespace
+      - action: labeldrop
+        regex: __meta_kubernetes_.*  # Drop Kubernetes metadata if not needed
+
+  # Scrape other services (example)
+  - job_name: 'my-database'
+    static_configs:
+      - targets: ['my-database:5432']  # Adjust the target address and port
+    metrics_path: '/metrics'  # Path to the metrics endpoint
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+
+  # Additional jobs can be added here...

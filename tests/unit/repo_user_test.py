@@ -29,6 +29,7 @@ async def test_get_user(db_session):
         first_name="Test",
         last_name="User",
         username="testuser",
+        phone_number="1234567890",
         email="testuser@example.com")
     user_repo.create(test_user)
 
