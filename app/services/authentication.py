@@ -44,7 +44,6 @@ class Authentication:
 
 
         if _userdata.two_factor:
-            print(_userdata.phone_number)
             otp = self.request_otp(to_phone_number=_userdata.phone_number, user_id=_userdata.id)
         payload = {'sub':str(_userdata.id), 'iat':datetime.now().timetuple()}
 
