@@ -41,6 +41,11 @@ class Authentication:
         validate_password = PasswordHandler.verify_password(password, hashed_password)
         if not validate_password:
             raise AuthenticationError(message='invalid username or password')
+
+
+        if _userdata.two_factor:
+            print(_userdata.phone_number)
+            otp = self.request_otp(to_phone_number=_userdata.phone_number, user_id=_userdata.id)
         payload = {'sub':str(_userdata.id), 'iat':datetime.now().timetuple()}
 
         try:
@@ -91,7 +96,8 @@ class Authentication:
     #       - This method should be able to send OTP to a phone number
     #       - The phone number should be in the format of 62xxxxxxxxxx
     #     + Create TEST for this method
-    def request_otp(self, to_phone_number: str):
+    def request_otp(self, to_phone_number: str, user_id: str):
+
         """
         Request OTP to a WhatsApp number
 
@@ -138,7 +144,9 @@ class Authentication:
                 language_code="en",
                 template_components=template_components
             )
-            print(_resp)
+                # if _resp.status_code == 200:
+                #     print(f"OTP sent to {to_phone_number}")
+                # print(_resp)
             if _resp.get("error"):
                 logger.error(f"Failed to request OTP: {_resp}")
                 raise Exception(f"Failed to request OTP: {_resp}")

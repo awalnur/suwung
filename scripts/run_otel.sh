@@ -12,3 +12,5 @@ docker compose -f ${PROJECT_ROOT}/config/docker-compose.yml up -d
 
 # Check if services are running
 docker compose -f ${PROJECT_ROOT}/config/docker-compose.yml ps
+
+
