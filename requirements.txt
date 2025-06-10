@@ -15,7 +15,7 @@ loguru~=0.7.2
 starlette~=0.40.0
 psycopg2~=2.9.10
 memory-profiler~=0.61.0
-requests==2.32.3
+requests==2.32.4
 
 psutil~=6.1.0
 opentelemetry-instrumentation-openai~=0.33.12
